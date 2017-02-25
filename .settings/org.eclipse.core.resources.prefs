@@ -1,0 +1,6 @@
+eclipse.preferences.version=1
+encoding//Infrastructure/Application/AppBase.py=utf-8
+encoding//Infrastructure/Application/QXDM.py=utf-8
+encoding//Infrastructure/Communication/Client.py=utf-8
+encoding//Infrastructure/Communication/NetUdpBase.py=utf-8
+encoding//Infrastructure/Communication/Server.py=utf-8
