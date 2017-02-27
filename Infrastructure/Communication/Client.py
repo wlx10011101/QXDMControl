@@ -40,3 +40,6 @@ class Client(NetUdpBase):
 #                 print "Time:{0}\rMessage:{1}\r".format(ctime(), data)
 #                 self.handoverMessage(data)
 #             handover the message
+if __name__ == "__main__":
+    client1 = Client('10.9.171.165', 8088)
+    client1.registerClient('10.9.171.151', 8088)

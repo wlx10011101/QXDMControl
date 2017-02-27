@@ -20,6 +20,7 @@ class Server(NetUdpBase):
 
     def _recvMessage(self):
         while True:
+            print "waiting for recvMessage"
             data, address = self._socket.recvfrom(1024)
             print "Time:{0}\rMessage:{1}\rFrom:{2}\r".format(ctime(), data, address)
             self.handoverMessage(data, address)
@@ -37,9 +38,5 @@ class Server(NetUdpBase):
         
 
 if __name__ == '__main__':
-    print "ddddd"
-#     message = MESSAGE["ClientRegister"].format("QXDM1")
-    message = "ddd"
-    print message, MESSAGEREX["ClientRegister"]
-    match = re.findall(MESSAGEREX["ClientRegister"], message)
-    print match
+    server = Server('10.9.171.151', 8088)
+    server._recvMessage()
