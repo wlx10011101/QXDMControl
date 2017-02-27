@@ -25,12 +25,7 @@ class Server(NetUdpBase):
             data, address = self._socket.recvfrom(1024)
             print "Time:{0}\rnMessage:{1}\rnFrom:{2}\rn".format(ctime(), data, address)
             threading.Thread(target=self.handoverMessage, args=(data, address)).start()
-#             self.handoverMessage(data, address)
-#             handover the message
 
-#     def _sendMessage(self, message, host, port):
-#         pass
-    
     def handoverMessage(self, message, address):
         reResult = re.findall(MESSAGEREX["ClientRegister"], message)
         if reResult:
@@ -41,10 +36,18 @@ class Server(NetUdpBase):
         else:
             reResult = re.findall(MESSAGEREX["ExcuteResult"], message)
             if reResult:
-                print "client:{0} {1}".format(self._clientDict[address], message)
+                if self._precheck(address):
+                    print "client:{0} {1}\r\n".format(self._clientDict[address], message)
+                else:
+                    print "unRegister Client {0}\r\n".format(address)
             else:
-                self._sendMessage("Invaild Message", address)
-        
+                self._sendMessage("Invalid Message From {0}\r\n".format(address))
+
+    def _precheck(self, address):
+        if address in self._clientDict.keys():
+            return True
+        else:
+            return False
 
 if __name__ == '__main__':
     server = Server('10.9.171.151', 8088)

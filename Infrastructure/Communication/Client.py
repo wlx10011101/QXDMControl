@@ -4,10 +4,11 @@ Created on 20170224
 
 @author: WLX
 '''
+from multiprocessing import Queue
 from time import ctime
 
-from Infrastructure.Communication.NetUdpBase import NetUdpBase
 from Infrastructure.Communication.MessageRule import MESSAGE
+from Infrastructure.Communication.NetUdpBase import NetUdpBase
 
 
 class Client(NetUdpBase):
@@ -22,7 +23,9 @@ class Client(NetUdpBase):
         super(Client, self).__init__(host, port)
         self._name = name
         self._serverAddr = None
-        
+        self._dataQueue = Queue.Queue()
+        self._addrQueue = Queue.Queue()
+
     def registerClient(self, serverHost, serverPort):
         serverAddr = (serverHost, serverPort)
         self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
@@ -38,15 +41,21 @@ class Client(NetUdpBase):
             else:
                 print ">>>>\r\nTime:{0}\r\nClient:{1}\r\nRegister Failure:{2\r\n<<<<\r\n".format(ctime(), self._name, data)
                 return False
- 
+
     def _recvMessage(self):
         while True:
             data, addr = self._socket.recvfrom(1024)
-            if self.precheck(addr):
+            if self._precheck(addr):
                 print "Time:{0}\rMessage:{1}\r".format(ctime(), data)
-                self.handoverMessage(data)
-#             handover the message
+                self._dataQueue.put(data)
+                self._addrQueue.put(addr)
+
+    def _precheck(self, address):
+        if address == self._serverAddr:
+            return True
+        else:
+            return False
+
 if __name__ == "__main__":
     client1 = Client('10.9.171.165', 8088, 'clent1')
     client1.registerClient('10.9.171.151', 8088)
-    

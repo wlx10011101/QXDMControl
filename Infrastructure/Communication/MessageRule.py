@@ -1,12 +1,15 @@
+# coding=utf-8
 MESSAGE = {
     "ClientRegister": "Register {0}",
     "RegisterSucc": "Client {0} Register Success",
-    "ConnectQXDM": "ConnectQXDM",
-    "ExcuteResult": "ExcuteResult {0}"
+    "ExcuteResult": "ExcuteResult {0}",
+    "UeAttach": "QxdmCmd ue_attach",
+    "UeDettach": "QxdmCmd ue_dettach"
     }
 
 MESSAGEREX = {
     "ClientRegister": "Register (.+)$",
     "RegisterSucc": "Client (.+) Register Success",
-    "ExcuteResult": "ExcuteResult (.+)$"
+    "QxdmCmd": "QxdmCmd (.*)$",
+    "ExcuteResult": "ExcuteResult (.+)$",
     }

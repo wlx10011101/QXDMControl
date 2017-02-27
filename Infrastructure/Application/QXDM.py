@@ -33,11 +33,11 @@ class QXDM(AppBase):
             logging.warning("Connect QXDM Fail")
             return False
 
-    def findCommandWindow(self):
+    def _findCommandWindow(self):
         return self._app.window_(title_re="QXDM").window_(class_name=u"Edit", control_id=0x3E9)
 
     def sendCommand(self, command):
-        commandWindow = self.findCommandWindow()
+        commandWindow = self._findCommandWindow()
         commandWindow.TypeKeys(command if re.search(r'.*~^', command) else (command + '~'))
 
 if __name__ == "__main__":
