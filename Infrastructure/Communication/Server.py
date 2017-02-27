@@ -15,12 +15,12 @@ from Infrastructure.Communication.NetUdpBase import NetUdpBase
 class Server(NetUdpBase):
 
     def __init__(self, host, port):
-        super(self, Server).__init__(host, port)
+        super(Server, self).__init__(host, port)
         self._clientAddrList = []
 
     def _recvMessage(self):
         while True:
-            print "waiting for recvMessage"
+            print "waiting for recvMessage...."
             data, address = self._socket.recvfrom(1024)
             print "Time:{0}\rMessage:{1}\rFrom:{2}\r".format(ctime(), data, address)
             self.handoverMessage(data, address)

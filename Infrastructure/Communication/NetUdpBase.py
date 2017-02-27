@@ -18,7 +18,7 @@ class NetUdpBase(object):
         self._port = port
         self._address = (self._host, self._port)
         self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self._socket.bind(ALL_IP_OF_HOST, self._port)
+        self._socket.bind((ALL_IP_OF_HOST, self._port))
 
     def _recvMessage(self):
         raise "NotImpletementERROR"

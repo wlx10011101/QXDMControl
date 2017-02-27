@@ -19,15 +19,18 @@ class Client(NetUdpBase):
         '''
         Constructor
         '''
-        super(self, Client).__init__(host, port)
+        super(Client, self).__init__(host, port)
         self._name = name
         self._serverAddr = None
         
     def registerClient(self, serverHost, serverPort):
         serverAddr = (serverHost, serverPort)
         self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
+        print "send message ", MESSAGE["ClientRegister"].format(self._name)
         while True:
             data, addr = self._socket.recvfrom(1024)
+            print "waiting for message ---"
+            print data, addr
             if addr is serverAddr and data is MESSAGE["RegisterSucc"].format(self._name):
                 print "Time:{0}\rClient:{1}\rRegister Success\r".format(ctime(), self._name)
                 self._serverAddr = serverAddr
@@ -41,5 +44,5 @@ class Client(NetUdpBase):
 #                 self.handoverMessage(data)
 #             handover the message
 if __name__ == "__main__":
-    client1 = Client('10.9.171.165', 8088)
+    client1 = Client('10.9.171.165', 8088, 'clent1')
     client1.registerClient('10.9.171.151', 8088)
