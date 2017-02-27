@@ -13,7 +13,7 @@ import AppBase
 class QXDM(AppBase):
 
     def __init__(self, qxdmPath, qxdmProcess=None, qxdmHandle=None):
-        super(self, QXDM).__init__(qxdmPath, qxdmProcess, qxdmHandle)
+        super(QXDM, self).__init__(qxdmPath, qxdmProcess, qxdmHandle)
 
     def _startApp(self):
         try:
@@ -23,9 +23,11 @@ class QXDM(AppBase):
             logging.warning("Start QXDM Fail!")
             return False
 
-    def _connectApp(self, qxdmProcess, qxdmHandle, qxdmPath):
+    def _connectApp(self):
         try:
-            self._app = Application().Connect(process=qxdmProcess, handle=qxdmHandle, path=qxdmPath)
+            self._app = Application().Connect(process=self._appProcess, \
+                                              handle=self._appHandle, \
+                                              path=self._appPath)
             return True
         except Exception:
             logging.warning("Connect QXDM Fail")
