@@ -23,5 +23,5 @@ class NetUdpBase(object):
     def _recvMessage(self):
         raise "NotImpletementERROR"
 
-    def _sendMessage(self, message, host, port):
-        raise "NotImpletementERROR"
+    def _sendMessage(self, message, address):
+        self._socket.sendto(message, address)
