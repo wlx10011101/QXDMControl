@@ -5,6 +5,6 @@ Created on 2017年2月27日
 @author: WLX
 '''
 UE = {
-    'UE_ATTACH': "-lpmd online",
-    'UE_DETTACH': "-lpmd offline",
+    'UE_ATTACH': "-mode online",
+    'UE_DETTACH': "-mode lpm",
     }
