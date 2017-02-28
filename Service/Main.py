@@ -6,4 +6,13 @@ Created on 20170228
 '''
 
 if __name__ == '__main__':
-    pass
+    separator = '-----------------------------'
+    
+    note = 'This Application is just for \r\n\
+            sending the command to QXDM \r\n\
+            that can control UE attach \r\n\
+            and detach\r\n'
+
+    function = '*please start Server First!*'
+    
+    print note

@@ -34,6 +34,7 @@ class QxdmClient(object):
 
     def _initQxdm(self):
         qxdmPath = raw_input("please input the absolutepath of QXDM.exe: ")
+        qxdmPath = self._pathFormat(qxdmPath)
         for process in psutil.process_iter():
             if process.name().upper() == "QXDM.EXE":
                 if qxdmPath in process.cmdline():
@@ -54,11 +55,16 @@ class QxdmClient(object):
                 self._client._sendMessage(MESSAGE["ExcuteResult"].format("Success"))
             else:
                 self._client._sendMessage(MESSAGE["ExcuteResult"].format("Falure"))
+        
+    def _pathFormat(self, path):
+        return '\\\\'.join(path.split('\\'))
 
 if __name__ == "__main__":
-    host = raw_input("please input client IP: ")
-    port = 8088
-    name = raw_input("please input client name: ")
-    serverHost = raw_input("please input server IP: ")
-    serverPort = 8088
-    print host, port, name, serverHost, serverPort
+#     host = raw_input("please input client IP: ")
+#     port = 8088
+#     name = raw_input("please input client name: ")
+#     serverHost = raw_input("please input server IP: ")
+#     serverPort = 8088
+#     print host, port, name, serverHost, serverPort
+    qxdmPath = "C:\Program Files\Qualcomm\QXDM\Bin\QXDM.exe"
+    print '\\\\'.join(qxdmPath.split('\\'))
