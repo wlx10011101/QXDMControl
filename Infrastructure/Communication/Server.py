@@ -6,11 +6,12 @@ Created on 20170224
 @author: WLX
 '''
 import re
+import threading
 from time import ctime
 
 from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE
 from Infrastructure.Communication.NetUdpBase import NetUdpBase
-from decimal import threading
+from win32com.test.errorSemantics import logging
 
 
 class Server(NetUdpBase):
@@ -21,9 +22,9 @@ class Server(NetUdpBase):
 
     def _recvMessage(self):
         while True:
-            print "waiting for recvMessage...."
+            logging.info("waiting for recvMessage---")
             data, address = self._socket.recvfrom(1024)
-            print "Time:{0}\rnMessage:{1}\rnFrom:{2}\rn".format(ctime(), data, address)
+            logging.debug("Message:{1}\r\nFrom:{2}\r\n".format(data, address))
             threading.Thread(target=self.handoverMessage, args=(data, address)).start()
 
     def handoverMessage(self, message, address):
@@ -32,14 +33,14 @@ class Server(NetUdpBase):
             clientDict = {address: reResult[0]}
             self._clientDict.update(clientDict)
             self._sendMessage(MESSAGE["RegisterSucc"].format(clientDict[address]), address)
-            print "{0} RegisterSucc\r\n".format(clientDict)
+            logging.debug("{0} RegisterSucc\r\n".format(clientDict))
         else:
             reResult = re.findall(MESSAGEREX["ExcuteResult"], message)
             if reResult:
                 if self._precheck(address):
-                    print "client:{0} {1}\r\n".format(self._clientDict[address], message)
+                    logging.debug("client:{0} {1}\r\n".format(self._clientDict[address], message))
                 else:
-                    print "unRegister Client {0}\r\n".format(address)
+                    logging.debug("unRegister Client {0}\r\n".format(address))
             else:
                 self._sendMessage("Invalid Message From {0}\r\n".format(address))
 

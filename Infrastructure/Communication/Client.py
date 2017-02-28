@@ -4,6 +4,7 @@ Created on 20170224
 
 @author: WLX
 '''
+import logging
 from multiprocessing import Queue
 from time import ctime
 
@@ -29,24 +30,24 @@ class Client(NetUdpBase):
     def registerClient(self, serverHost, serverPort):
         serverAddr = (serverHost, serverPort)
         self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
-        print "send message ", MESSAGE["ClientRegister"].format(self._name)
+        logging.debug("send message {0}".format(MESSAGE["ClientRegister"].format(self._name)))
         while True:
             data, addr = self._socket.recvfrom(1024)
-            print "waiting for message ---"
+            logging.info("waiting for message ---")
             print data, addr
             if addr == serverAddr and data == MESSAGE["RegisterSucc"].format(self._name):
-                print ">>>>\r\nTime:{0}\r\nClient:{1}\r\nRegister Success\r\n<<<<\r\n".format(ctime(), self._name)
+                logging.debug(">>>>\r\nClient:{0}\r\nRegister Success\r\n<<<<\r\n".format(self._name))
                 self._serverAddr = serverAddr
                 return True
             else:
-                print ">>>>\r\nTime:{0}\r\nClient:{1}\r\nRegister Failure:{2\r\n<<<<\r\n".format(ctime(), self._name, data)
+                logging.debug(">>>>\r\nClient:{0}\r\nRegister Failure:{1}\r\n<<<<\r\n".format(self._name, data))
                 return False
 
     def _recvMessage(self):
         while True:
             data, addr = self._socket.recvfrom(1024)
             if self._precheck(addr):
-                print "Time:{0}\rMessage:{1}\r".format(ctime(), data)
+                logging.debug("Message:{1}\r\n".format(data))
                 self._dataQueue.put(data)
                 self._addrQueue.put(addr)
 

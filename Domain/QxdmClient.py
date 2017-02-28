@@ -9,7 +9,7 @@ import re
 import psutil
 
 from Domain.QxdmCmd import UE
-from Infrastructure.Application.QXDM import QXDM
+from Infrastructure.Application.QxdmApp import QXDM
 from Infrastructure.Communication import Client
 from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE
 
@@ -19,8 +19,8 @@ class QxdmClient(object):
     classdocs
     '''
     def __init__(self):
-        self._initQxdm()
-        self._initClient()
+        while(not self._initQxdm()):pass
+        while(not self._initClient()):pass
 
     def _initClient(self):
         host = raw_input("please input client IP: ")
@@ -31,19 +31,22 @@ class QxdmClient(object):
         self._client = Client(host, port, name)
         if self._client.registerClient(serverHost, serverPort):
             self._client._recvMessage()
+            return True
+        else:
+            return False
 
     def _initQxdm(self):
-        qxdmPath = raw_input("please input the absolutepath of QXDM.exe: ")
+        qxdmPath = raw_input("please input the absolutepath of QxdmApp.exe: \n")
         qxdmPath = self._pathFormat(qxdmPath)
         for process in psutil.process_iter():
-            if process.name().upper() == "QXDM.EXE":
+            if process.name().upper() == "QxdmApp.EXE":
                 if qxdmPath in process.cmdline():
                     qxdmPid = process.pid
                     self._qxdm = QXDM(qxdmPath, qxdmPid)
-                    self._qxdm._connectApp()
+                    return self._qxdm._connectApp()
         else:
             self._qxdm = QXDM(qxdmPath)
-            self._qxdm._startApp()
+            return self._qxdm._startApp()
 
     def handoverMessage(self):
         while not self._client._dataQueue.empty():
@@ -55,7 +58,7 @@ class QxdmClient(object):
                 self._client._sendMessage(MESSAGE["ExcuteResult"].format("Success"))
             else:
                 self._client._sendMessage(MESSAGE["ExcuteResult"].format("Falure"))
-        
+
     def _pathFormat(self, path):
         return '\\\\'.join(path.split('\\'))
 
@@ -66,5 +69,5 @@ if __name__ == "__main__":
 #     serverHost = raw_input("please input server IP: ")
 #     serverPort = 8088
 #     print host, port, name, serverHost, serverPort
-    qxdmPath = "C:\Program Files\Qualcomm\QXDM\Bin\QXDM.exe"
+    qxdmPath = "C:\Program Files\Qualcomm\QxdmApp\Bin\QxdmApp.exe"
     print '\\\\'.join(qxdmPath.split('\\'))

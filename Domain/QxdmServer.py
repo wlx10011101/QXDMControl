@@ -4,7 +4,8 @@ Created on Feb 27, 2017
 
 @author: wlx
 '''
-from decimal import threading
+import logging
+import threading
 from time import ctime
 
 from Infrastructure.Communication.MessageRule import MESSAGE
@@ -30,10 +31,10 @@ class QxdmServer(object):
 
     def ueAttach(self):
         for address in self._server._clientDict.keys():
-            print "Time:{0}\r\nControl client {1} ue attach\r\n".format(ctime(), self._server._clientDict[address])
+            logging.debug("Control client {1} ue attach\r\n".format(self._server._clientDict[address]))
             self._server._sendMessage(MESSAGE['UeAttach'], address)
 
     def ueDettach(self):
         for address in self._server._clientDict.keys():
-            print "Time:{0}\r\nControl client {1} ue dettach\r\n".format(ctime(), self._server._clientDict[address])
+            logging.debug("Control client {1} ue dettach\r\n".format(self._server._clientDict[address]))
             self._server._sendMessage(MESSAGE['UeDettach'], address)

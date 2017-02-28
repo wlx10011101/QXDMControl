@@ -6,8 +6,10 @@ Created on 2017220
 '''
 import logging
 import re
+
 from pywinauto.application import Application
-import AppBase
+
+from Infrastructure.Application.APPBase import AppBase
 
 
 class QXDM(AppBase):
