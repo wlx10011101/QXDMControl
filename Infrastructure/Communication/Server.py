@@ -7,7 +7,6 @@ Created on 20170224
 '''
 import re
 import threading
-from time import ctime
 import logging
 
 from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE
@@ -19,7 +18,7 @@ class Server(NetUdpBase):
     def __init__(self, host, port):
         super(Server, self).__init__(host, port)
         self._clientDict = {}
-
+        
     def _recvMessage(self):
         while True:
             logging.info("waiting for recvMessage---")
@@ -32,6 +31,7 @@ class Server(NetUdpBase):
         if reResult:
             clientDict = {address: reResult[0]}
             self._clientDict.update(clientDict)
+            self._recordTxt(address[0])
             self._sendMessage(MESSAGE["RegisterSucc"].format(clientDict[address]), address)
             logging.info("{0} RegisterSucc".format(clientDict))
         else:
@@ -49,15 +49,30 @@ class Server(NetUdpBase):
             return True
         else:
             return False
+        
+    def _recordTxt(self, host):
+        fileObject = open('client.txt','a')
+        fileObject.write(host)
+        fileObject.close()
 
 if __name__ == '__main__':
-    server = Server('10.9.171.151', 8088)
-#     server._recvMessage()
-    dict = {('10.9.220.151', 8088): 'client'}
-    server._clientDict.update(dict)
-    print  server._clientDict
+#     server = Server('10.9.171.151', 8088)
+# #     server._recvMessage()
+# #     dict = {('10.9.220.151', 8088): 'client'}
+#     server._clientDict.update(dict)
+#     print  server._clientDict
+    address = ('10.9.220.151', 8088)
+    print address[0]
+    address1 = '10.9.222.111'
     client1 = {('10.9.220.151', 8088): 'client22'}
-    server._clientDict.update(client1)
-#     print client1.values()[0] in server._clientDict.values()
-    print  server._clientDict
+#     server._clientDict.update(client1)
+# #     print client1.values()[0] in server._clientDict.values()
+#     print  server._clientDict
+    fileObject = open('client.txt','a')
+    fileObject.writelines(address[0]+'\r\n')
+    fileObject.write(address1+'\r\n')
+    fileObject.close()
+    fileObject = open('client.txt','a')
+    fileObject.write(address1+'\r\n')
+    fileObject.close()
     

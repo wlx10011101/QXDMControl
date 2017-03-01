@@ -4,7 +4,8 @@ MESSAGE = {
     "RegisterSucc": "Client {0} Register Success",
     "ExcuteResult": "ExcuteResult {0}",
     "UeAttach": "QxdmCmd ue_attach",
-    "UeDetach": "QxdmCmd ue_dettach"
+    "UeDetach": "QxdmCmd ue_dettach",
+    "ClientRegisterAgain": 'ClientRegisterAgain',
     }
 
 MESSAGEREX = {
@@ -12,4 +13,5 @@ MESSAGEREX = {
     "RegisterSucc": "Client (.+) Register Success",
     "QxdmCmd": "QxdmCmd (.*)$",
     "ExcuteResult": "ExcuteResult (.+)$",
+    "ClientRegisterAgain": 'ClientRegisterAgain',
     }

@@ -6,6 +6,7 @@ Created on Feb 27, 2017
 '''
 import psutil
 import re
+import threading
 
 from Domain.QxdmCmd import UE
 from Infrastructure.Application.QxdmApp import QXDM
@@ -29,7 +30,8 @@ class QxdmClient(object):
         serverPort = 8088
         self._client = Client(host, port, name)
         if self._client.registerClient(serverHost, serverPort):
-            self._client._recvMessage()
+            threading.thread(target=self._client._recvMessage).start()
+            threading.thread(target=self.handoverMessage).start()
             return True
         else:
             return False
@@ -54,9 +56,9 @@ class QxdmClient(object):
             reResult = re.findall(MESSAGEREX['QxdmCmd'], message)
             if reResult:
                 self._qxdm.sendCommand(UE[reResult[0].upeer()])
-                self._client._sendMessage(MESSAGE["ExcuteResult"].format("Success"))
+                self._client._sendMessage(MESSAGE["ExcuteResult"].format("Success"), address)
             else:
-                self._client._sendMessage(MESSAGE["ExcuteResult"].format("Falure"))
+                self._client._sendMessage(MESSAGE["ExcuteResult"].format("Falure"), address)
 
     def _pathFormat(self, path):
         return '\\\\'.join(path.split('\\'))

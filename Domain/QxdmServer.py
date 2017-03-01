@@ -6,7 +6,6 @@ Created on Feb 27, 2017
 '''
 import logging
 import threading
-from time import ctime
 
 from Infrastructure.Communication.MessageRule import MESSAGE
 from Infrastructure.Communication.Server import Server
@@ -28,6 +27,20 @@ class QxdmServer(object):
         port = 8088
         self._server = Server(host, port)
         threading.Thread(target=self._server._recvMessage).start()
+        self.initClientDict()
+        
+    def initClientDict(self):
+        try:
+            fileObject = open('..\/Infrastructure\/Communication\/client.txt', 'r')
+            fileLines = fileObject.readlines()
+            fileObject.close()
+            for fileLine in fileLines:
+                if file:
+                    address = (fileLine, 8088)
+                    self._server._sendMessage(MESSAGE['ClientRegisterAgain'], address)
+        except Exception:
+            logging.info('No record for Client')
+            
 
     def ueAttach(self):
         for address in self._server._clientDict.keys():
