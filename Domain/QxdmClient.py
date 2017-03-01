@@ -23,25 +23,25 @@ class QxdmClient(object):
         while(not self._initClient()):pass
 
     def _initClient(self):
-        host = raw_input("please input client IP: ")
+        host = '127.0.0.1'
         port = 8088
         name = raw_input("please input client name: ")
         serverHost = raw_input("please input server IP: ")
         serverPort = 8088
         self._client = Client(host, port, name)
         if self._client.registerClient(serverHost, serverPort):
-            threading.thread(target=self._client._recvMessage).start()
-            threading.thread(target=self.handoverMessage).start()
+            threading.Thread(target=self._client._recvMessage).start()
+            threading.Thread(target=self.handoverMessage).start()
             return True
         else:
             return False
 
     def _initQxdm(self):
-        qxdmPath = raw_input("please input the absolutepath of QxdmApp.exe: \n")
+        qxdmPath = raw_input("please input the absolutepath of QXDM.exe: \n")
         qxdmPath = self._pathFormat(qxdmPath)
         for process in psutil.process_iter():
             if process.name().upper() == "QXDM.EXE":
-                if qxdmPath == self._pathFormat(process.cmdline()):
+                if qxdmPath == self._pathFormat(process.cmdline()[0]):
                     qxdmPid = process.pid
                     self._qxdm = QXDM(qxdmPath, qxdmPid)
                     return self._qxdm._connectApp()
@@ -57,8 +57,12 @@ class QxdmClient(object):
             if reResult:
                 self._qxdm.sendCommand(UE[reResult[0].upeer()])
                 self._client._sendMessage(MESSAGE["ExcuteResult"].format("Success"), address)
-            else:
-                self._client._sendMessage(MESSAGE["ExcuteResult"].format("Falure"), address)
+            else: 
+                self._client._sendMessage(MESSAGE["ExcuteResult"].format("Fail"), address)
+            if re.findall(MESSAGEREX['ClientRegisterAgain'], message):
+                self._sendMessage(MESSAGE["ClientRegister"].format(self._client._name), address)
+            if message == MESSAGE["RegisterSucc"].format(self._name):pass
+                
 
     def _pathFormat(self, path):
         return '\\\\'.join(path.split('\\'))

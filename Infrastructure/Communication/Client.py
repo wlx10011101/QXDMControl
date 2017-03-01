@@ -39,7 +39,7 @@ class Client(NetUdpBase):
                 self._serverAddr = serverAddr
                 return True
             else:
-                logging.info(">>>>Client:{0} Register Failure:{1}".format(self._name, data))
+                logging.info("Client:{0} Register Failure:{1}".format(self._name, data))
                 return False
 
     def _recvMessage(self):

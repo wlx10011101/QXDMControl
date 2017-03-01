@@ -52,7 +52,7 @@ class Server(NetUdpBase):
         
     def _recordTxt(self, host):
         fileObject = open('client.txt','a')
-        fileObject.write(host)
+        fileObject.write(host+'\r\n')
         fileObject.close()
 
 if __name__ == '__main__':

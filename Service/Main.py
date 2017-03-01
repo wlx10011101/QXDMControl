@@ -33,6 +33,7 @@ class MainService(object):
             self._clientService = QxdmClient()
         elif qxdmType == "2":
             self._ServerService = QxdmServer()
+            self._controlUe()
         else:
             print "Invalid Input"
     
@@ -54,33 +55,9 @@ class MainService(object):
             else:
                 print "Invalid Input"
 
-# def onKeyboardEvent(event):
-#     print "MessageName:", event.MessageName
-#     print "Message:", event.Message
-#     print "Time:", event.Time
-#     print "Window:", event.Window
-#     print "WindowName:", event.WindowName
-#     print "Ascii:", event.Ascii, chr(event.Ascii)
-#     print "Key:", event.Key
-#     print "KeyID:", event.KeyID
-#     print "ScanCode:", event.ScanCode
-#     print "Extended:", event.Extended
-#     print "Injected:", event.Injected
-#     print "Alt", event.Alt
-#     print "Transition", event.Transition
-#     print "---"
-
-# 
-# def startKeyboardListen():
-#     hm = pyHook.HoolManager()
-#     hm.KeyDown = onKeyboardEvent
-#     hm.HookKeyboard()
-#     pythoncom.PumpMessages()
-
 def main():
     service = MainService()
     service._printNote()
     service._initApp()
-    service._controlUe()
 if __name__ == '__main__':
     main()

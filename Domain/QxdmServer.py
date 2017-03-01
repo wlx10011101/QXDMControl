@@ -23,7 +23,8 @@ class QxdmServer(object):
         self._initServer()
 
     def _initServer(self):
-        host = raw_input("please input server IP: ")
+        host = '127.0.0.1'
+        logging.info('starting Server---')
         port = 8088
         self._server = Server(host, port)
         threading.Thread(target=self._server._recvMessage).start()
@@ -31,13 +32,14 @@ class QxdmServer(object):
         
     def initClientDict(self):
         try:
-            fileObject = open('..\/Infrastructure\/Communication\/client.txt', 'r')
+            fileObject = open('..\/Service\/client.txt', 'r')
             fileLines = fileObject.readlines()
             fileObject.close()
             for fileLine in fileLines:
                 if file:
-                    address = (fileLine, 8088)
+                    address = (fileLine[:-2], 8088)
                     self._server._sendMessage(MESSAGE['ClientRegisterAgain'], address)
+                    logging.info("{0} to {1}".format(address))
         except Exception:
             logging.info('No record for Client')
             
