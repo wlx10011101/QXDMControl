@@ -6,9 +6,8 @@ Created on 20170224
 '''
 import logging
 logging.basicConfig(level=logging.DEBUG)
-import Queue
 
-from Infrastructure.Communication.MessageRule import MESSAGE
+from Infrastructure.Communication.MessageRule import MESSAGE, SERVER_PORT
 from Infrastructure.Communication.NetUdpBase import NetUdpBase
 
 
@@ -23,36 +22,34 @@ class Client(NetUdpBase):
         '''
         super(Client, self).__init__(host, port)
         self._name = name
-        self._serverAddr = None
-        self._dataQueue = Queue.Queue()
-        self._addrQueue = Queue.Queue()
+        self._serverHost = None
 
-    def registerClient(self, serverHost, serverPort):
-        serverAddr = (serverHost, serverPort)
+    def registerClient(self, serverHost):
+        serverAddr = (serverHost, SERVER_PORT)
         self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
         logging.info("send message {0}".format(MESSAGE["ClientRegister"].format(self._name)))
         while True:
             data, addr = self._socket.recvfrom(1024)
             logging.info("waiting for message ---")
             print data, addr
-            if addr == serverAddr and data == MESSAGE["RegisterSucc"].format(self._name):
+            if addr[0] == serverHost and data == MESSAGE["RegisterSucc"].format(self._name):
                 logging.info("Client:{0} Register Success".format(self._name))
-                self._serverAddr = serverAddr
+                self._serverHost = serverHost
                 return True
             else:
                 logging.info("Client:{0} Register Failure:{1}".format(self._name, data))
                 return False
 
-    def _recvMessage(self):
+    def _recvMessage(self, dataQueue, addrQueue):
         while True:
             data, addr = self._socket.recvfrom(1024)
-            if self._precheck(addr):
+            if self._precheck(addr[0]):
                 logging.info("Message:{0}".format(data))
-                self._dataQueue.put(data)
-                self._addrQueue.put(addr)
+                dataQueue.put(data)
+                addrQueue.put(addr[0])
 
-    def _precheck(self, address):
-        if address == self._serverAddr:
+    def _precheck(self, host):
+        if host == self._serverHost:
             return True
         else:
             return False

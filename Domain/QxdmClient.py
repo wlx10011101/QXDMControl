@@ -4,6 +4,7 @@ Created on Feb 27, 2017
 
 @author: wlx
 '''
+import Queue
 import psutil
 import re
 import threading
@@ -19,6 +20,8 @@ class QxdmClient(object):
     classdocs
     '''
     def __init__(self):
+        self._dataQueue = Queue.Queue
+        self._addrQueue = Queue.Queue
         while(not self._initQxdm()):pass
         while(not self._initClient()):pass
 
@@ -30,7 +33,7 @@ class QxdmClient(object):
         serverPort = 8088
         self._client = Client(host, port, name)
         if self._client.registerClient(serverHost, serverPort):
-            threading.Thread(target=self._client._recvMessage).start()
+            threading.Thread(target=self._client._recvMessage, args=(self._dataQueue, self._addrQueue)).start()
             threading.Thread(target=self.handoverMessage).start()
             return True
         else:
@@ -50,9 +53,9 @@ class QxdmClient(object):
             return self._qxdm._startApp()
 
     def handoverMessage(self):
-        while not self._client._dataQueue.empty():
-            message = self._client._dataQueue.get()
-            address = self._client._addrQueue.get()
+        while not self._dataQueue.empty():
+            message = self._dataQueue.get()
+            address = self._addrQueue.get()
             reResult = re.findall(MESSAGEREX['QxdmCmd'], message)
             if reResult:
                 self._qxdm.sendCommand(UE[reResult[0].upeer()])

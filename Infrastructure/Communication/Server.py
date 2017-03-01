@@ -10,7 +10,8 @@ import threading
 import logging
 logging.basicConfig(level=logging.DEBUG)
 
-from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE
+from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE,\
+    CLIENT_PORT
 from Infrastructure.Communication.NetUdpBase import NetUdpBase
 
 
@@ -24,29 +25,30 @@ class Server(NetUdpBase):
         while True:
             logging.info("waiting for recvMessage---")
             data, address = self._socket.recvfrom(1024)
-            logging.info("Message:{0} From:{1}".format(data, address))
-            threading.Thread(target=self.handoverMessage, args=(data, address)).start()
+            logging.info("Message:{0} From:{1}".format(data, address[0]))
+            threading.Thread(target=self.handoverMessage, args=(data, address[0])).start()
 
-    def handoverMessage(self, message, address):
+    def handoverMessage(self, message, hostIP):
         reResult = re.findall(MESSAGEREX["ClientRegister"], message)
+        clientAddr = (hostIP, CLIENT_PORT)
         if reResult:
-            clientDict = {address: reResult[0]}
+            clientDict = {clientAddr: reResult[0]}
             self._clientDict.update(clientDict)
-            self._recordTxt(address[0])
-            self._sendMessage(MESSAGE["RegisterSucc"].format(clientDict[address]), address)
+            self._recordTxt(hostIP)
+            self._sendMessage(MESSAGE["RegisterSucc"].format(clientDict[clientAddr]), clientAddr)
             logging.info("{0} RegisterSucc".format(clientDict))
         else:
             reResult = re.findall(MESSAGEREX["ExcuteResult"], message)
             if reResult:
-                if self._precheck(address):
-                    logging.info("client:{0} {1}".format(self._clientDict[address], message))
+                if self._precheck(address[0]):
+                    logging.info("client:{0} {1}".format(self._clientDict[hostIP], message))
                 else:
-                    logging.info("unRegister Client {0}".format(address))
+                    logging.info("unRegister Client {0}".format(hostIP))
             else:
-                self._sendMessage("Invalid Message From {0}".format(address))
+                self._sendMessage("Invalid Message From {0}".format(hostIP))
 
-    def _precheck(self, address):
-        if address in self._clientDict.keys():
+    def _precheck(self, host):
+        if host in self._clientDict.keys():
             return True
         else:
             return False

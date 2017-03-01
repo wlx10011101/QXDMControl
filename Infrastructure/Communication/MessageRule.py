@@ -1,4 +1,6 @@
 # coding=utf-8
+CLIENT_PORT = 8088
+SERVER_PORT = 8089
 MESSAGE = {
     "ClientRegister": "Register {0}",
     "RegisterSucc": "Client {0} Register Success",
