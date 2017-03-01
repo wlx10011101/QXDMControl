@@ -23,8 +23,10 @@ class QxdmClient(object):
     def __init__(self):
         self._dataQueue = Queue.Queue()
         self._addrQueue = Queue.Queue()
-        while(not self._initQxdm()):pass
-        while(not self._initClient()):pass
+        while(not self._initQxdm()):
+            pass
+        while(not self._initClient()):
+            pass
 
     def _initClient(self):
         host = '127.0.0.1'
@@ -57,7 +59,6 @@ class QxdmClient(object):
                 message = self._dataQueue.get()
                 address = self._addrQueue.get()
                 reResult = re.findall(MESSAGEREX['QxdmCmd'], message)
-                
                 if re.findall(MESSAGEREX['ClientRegisterAgain'], message):
                     self._client._sendMessage(MESSAGE["ClientRegister"].format(self._client._name), (address, SERVER_PORT))
                 elif message == MESSAGE["RegisterSucc"].format(self._client._name):
@@ -65,20 +66,11 @@ class QxdmClient(object):
                 elif reResult:
                     self._qxdm.sendCommand(UE[reResult[0].upper()])
                     self._client._sendMessage(MESSAGE["ExcuteResult"].format("Success"), (address, SERVER_PORT))
-                else: 
+                else:
                     self._client._sendMessage(MESSAGE["ExcuteResult"].format("Fail"), (address, SERVER_PORT))
-
-                
 
     def _pathFormat(self, path):
         return '\\\\'.join(path.split('\\'))
 
 if __name__ == "__main__":
-#     host = raw_input("please input client IP: ")
-#     port = 8088
-#     name = raw_input("please input client name: ")
-#     serverHost = raw_input("please input server IP: ")
-#     serverPort = 8088
-#     print host, port, name, serverHost, serverPort
     qxdmPath = "C:\Program Files\Qualcomm\QxdmApp\Bin\QxdmApp.exe"
-    print '\\\\'.join(qxdmPath.split('\\'))

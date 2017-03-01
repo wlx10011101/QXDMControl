@@ -5,12 +5,14 @@ Created on Feb 27, 2017
 @author: wlx
 '''
 import logging
-logging.basicConfig(level=logging.DEBUG)
 import threading
 
-from Infrastructure.Communication.MessageRule import MESSAGE, SERVER_PORT,\
+from Infrastructure.Communication.MessageRule import MESSAGE, SERVER_PORT, \
     CLIENT_PORT
 from Infrastructure.Communication.Server import Server
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class QxdmServer(object):
@@ -30,7 +32,7 @@ class QxdmServer(object):
         self._server = Server(host, SERVER_PORT)
         threading.Thread(target=self._server._recvMessage).start()
         self.initClientDict()
-        
+
     def initClientDict(self):
         try:
             fileObject = open('..\/Service\/client.txt', 'r')
@@ -46,7 +48,6 @@ class QxdmServer(object):
                     logging.info("{0} to {1}".format(MESSAGE['ClientRegisterAgain'],address))
         except Exception:
             logging.info('No record for Client')
-            
 
     def ueAttach(self):
         for address in self._server._clientDict.keys():

@@ -5,12 +5,13 @@ Created on 2017220
 @author: wlx
 '''
 import logging
-logging.basicConfig(level=logging.DEBUG)
 import re
 
 from pywinauto.application import Application
-
 from Infrastructure.Application.APPBase import AppBase
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class QXDM(AppBase):
@@ -28,8 +29,8 @@ class QXDM(AppBase):
 
     def _connectApp(self):
         try:
-            self._app = Application().Connect(process=self._appProcess, \
-                                              handle=self._appHandle, \
+            self._app = Application().Connect(process=self._appProcess,
+                                              handle=self._appHandle,
                                               path=self._appPath)
             return True
         except Exception:
@@ -47,7 +48,8 @@ class QXDM(AppBase):
             logging.info("QXDM COMMAND ERROR:{0}".format(Exception))
 
 if __name__ == "__main__":
-#     app = Application().Start("notepad.exe")
+    '''
+#      app = Application().Start("notepad.exe")
 #     test = {"process": 6120}
 #     app = Application().connect(path="D:\\python\\pythonw.exe")
 #     app.UntitledNotepad.menu_select(u"help->About IDLE")
@@ -62,18 +64,19 @@ if __name__ == "__main__":
 #     Notpad_Edit = u"Edit"
 #     app = Application().Connect(process=2676)
 #     about_dlg = app.window_(title_re="QXDM")
-# #     app[Notpad_windows][Notpad_Edit].TypeKeys(u"hello world\r")
-# #     about_dlg.print_control_identifiers()
-# #     app[Notpad_Edit].TypeKeys(u"hello world")
-# #     about_dlg = about_dlg.window_(class_name=qxdm_command_class_name, control_id=qxdm_command_control_id)
-# #     about_dlg = about_dlg.window_(class_name=u"#32770", control_id=0xD4)
-# 
-# #     about_dlg_go = about_dlg[class_name = u"Button"]
-# 
+#     app[Notpad_windows][Notpad_Edit].TypeKeys(u"hello world\r")
+#     about_dlg.print_control_identifiers()
+#     app[Notpad_Edit].TypeKeys(u"hello world")
+#     about_dlg = about_dlg.window_(class_name=qxdm_command_class_name, control_id=qxdm_command_control_id)
+#     about_dlg = about_dlg.window_(class_name=u"#32770", control_id=0xD4)
+
+#     about_dlg_go = about_dlg[class_name = u"Button"]
+
 #     about_dlg_edit = about_dlg.window_(class_name=u"AfxWnd100u", control_id=0xE900)
-# #     about_dlg_edit.TypeKeys(u"122343~")
-# #     about_dlg_edit.TypeKeys('\r')
-# #     about_dlg_go.Click()
-# #     about_dlg[u"Go!"].Click()
+#     about_dlg_edit.TypeKeys(u"122343~")
+#     about_dlg_edit.TypeKeys('\r')
+#     about_dlg_go.Click()
+#     about_dlg[u"Go!"].Click()
 #     about_dlg_edit.print_control_identifiers()
+    '''
     pass

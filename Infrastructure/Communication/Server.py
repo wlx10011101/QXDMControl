@@ -24,6 +24,7 @@ class Server(NetUdpBase):
         self._clientDict = {}
         self._socket_recv.bind((ALL_IP_OF_HOST, SERVER_PORT))
         self._socket_send.bind((ALL_IP_OF_HOST, CLIENT_PORT))
+
     def _recvMessage(self):
         while True:
             logging.info("waiting for recvMessage---")
@@ -56,18 +57,20 @@ class Server(NetUdpBase):
             return True
         else:
             return False
-        
+
     def _recordTxt(self, host):
-        fileObject = open('client.txt','a')
+        fileObject = open('client.txt', 'a')
         fileObject.write(host+'\r\n')
         fileObject.close()
 
 if __name__ == '__main__':
+    '''
 #     server = Server('10.9.171.151', 8088)
 # #     server._recvMessage()
 # #     dict = {('10.9.220.151', 8088): 'client'}
 #     server._clientDict.update(dict)
 #     print  server._clientDict
+    '''
     address = ('10.9.220.151', 8088)
     print address[0]
     address1 = '10.9.222.111'
@@ -75,11 +78,10 @@ if __name__ == '__main__':
 #     server._clientDict.update(client1)
 # #     print client1.values()[0] in server._clientDict.values()
 #     print  server._clientDict
-    fileObject = open('client.txt','a')
+    fileObject = open('client.txt', 'a')
     fileObject.writelines(address[0]+'\r\n')
     fileObject.write(address1+'\r\n')
     fileObject.close()
-    fileObject = open('client.txt','a')
+    fileObject = open('client.txt', 'a')
     fileObject.write(address1+'\r\n')
     fileObject.close()
-    

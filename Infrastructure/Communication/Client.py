@@ -14,7 +14,6 @@ from Infrastructure.Communication.NetUdpBase import NetUdpBase
 logging.basicConfig(level=logging.DEBUG)
 
 
-
 class Client(NetUdpBase):
     '''
     Client for communication
@@ -32,8 +31,12 @@ class Client(NetUdpBase):
 
     def registerClient(self, serverHost):
         serverAddr = (serverHost, SERVER_PORT)
-        self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
-        logging.info("send message {0}".format(MESSAGE["ClientRegister"].format(self._name)))
+        try:
+            self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
+            logging.info("send message {0}".format(MESSAGE["ClientRegister"].format(self._name)))
+        except Exception:
+            logging.info("send message{0} fail".format(MESSAGE["ClientRegister"].format(self._name)))
+            return False
         while True:
             data, addr = self._socket_recv.recvfrom(1024)
             logging.info("waiting for message ---")

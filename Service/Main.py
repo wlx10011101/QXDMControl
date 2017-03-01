@@ -9,22 +9,22 @@ from Domain.QxdmServer import QxdmServer
 
 
 class MainService(object):
-    
+
     def __init__(self):
         self.separator = '-----------------------------\r\n'
-    
-    
+
     def _printNote(self):
         notes = ['This Application is just for',
-                'sending the command to QXDM',
-                'that can control UE attach', 
-                'and detach',]
+                 'sending the command to QXDM',
+                 'that can control UE attach',
+                 'and detach',
+                 ]
         function = '*please start Server First!*\r\n'
         print self.separator,
         for note in notes:
             print note
         print self.separator, function
-    
+
     def _initApp(self):
         print "1.start Client"
         print "2.start Server"
@@ -36,7 +36,7 @@ class MainService(object):
             self._controlUe()
         else:
             print "Invalid Input"
-    
+
     def _controlUe(self):
         notes = ["Now plese make sure ue connected QXDM",
                  "then you can send command to UE"]
@@ -44,7 +44,7 @@ class MainService(object):
         print self.separator
         for note in notes:
             print note
-            
+
         print ueControlNotes
         while True:
             action = raw_input("your action: ")
@@ -54,6 +54,7 @@ class MainService(object):
                 self._ServerService.ueDetach()
             else:
                 print "Invalid Input"
+
 
 def main():
     service = MainService()
