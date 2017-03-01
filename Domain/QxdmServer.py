@@ -39,7 +39,7 @@ class QxdmServer(object):
                 if file:
                     address = (fileLine[:-2], 8088)
                     self._server._sendMessage(MESSAGE['ClientRegisterAgain'], address)
-                    logging.info("{0} to {1}".format(address))
+                    logging.info("{0} to {1}".format(MESSAGE['ClientRegisterAgain'],address))
         except Exception:
             logging.info('No record for Client')
             
