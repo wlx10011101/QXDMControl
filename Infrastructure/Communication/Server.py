@@ -8,6 +8,7 @@ Created on 20170224
 import re
 import threading
 import logging
+logging.basicConfig(level=logging.DEBUG)
 
 from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE
 from Infrastructure.Communication.NetUdpBase import NetUdpBase

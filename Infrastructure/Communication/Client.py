@@ -5,6 +5,7 @@ Created on 20170224
 @author: WLX
 '''
 import logging
+logging.basicConfig(level=logging.DEBUG)
 import Queue
 
 from Infrastructure.Communication.MessageRule import MESSAGE

@@ -5,6 +5,7 @@ Created on 2017220
 @author: wlx
 '''
 import logging
+logging.basicConfig(level=logging.DEBUG)
 import re
 
 from pywinauto.application import Application

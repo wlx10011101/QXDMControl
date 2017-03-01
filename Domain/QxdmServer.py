@@ -5,6 +5,7 @@ Created on Feb 27, 2017
 @author: wlx
 '''
 import logging
+logging.basicConfig(level=logging.DEBUG)
 import threading
 
 from Infrastructure.Communication.MessageRule import MESSAGE
