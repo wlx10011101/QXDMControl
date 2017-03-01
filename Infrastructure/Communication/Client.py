@@ -5,10 +5,14 @@ Created on 20170224
 @author: WLX
 '''
 import logging
+
+from Infrastructure.Communication.MessageRule import MESSAGE, SERVER_PORT, \
+    ALL_IP_OF_HOST, CLIENT_PORT
+from Infrastructure.Communication.NetUdpBase import NetUdpBase
+
+
 logging.basicConfig(level=logging.DEBUG)
 
-from Infrastructure.Communication.MessageRule import MESSAGE, SERVER_PORT
-from Infrastructure.Communication.NetUdpBase import NetUdpBase
 
 
 class Client(NetUdpBase):
@@ -23,13 +27,15 @@ class Client(NetUdpBase):
         super(Client, self).__init__(host, port)
         self._name = name
         self._serverHost = None
+        self._socket_recv.bind((ALL_IP_OF_HOST, CLIENT_PORT))
+        self._socket_send.bind((ALL_IP_OF_HOST, SERVER_PORT))
 
     def registerClient(self, serverHost):
         serverAddr = (serverHost, SERVER_PORT)
         self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
         logging.info("send message {0}".format(MESSAGE["ClientRegister"].format(self._name)))
         while True:
-            data, addr = self._socket.recvfrom(1024)
+            data, addr = self._socket_recv.recvfrom(1024)
             logging.info("waiting for message ---")
             print data, addr
             if addr[0] == serverHost and data == MESSAGE["RegisterSucc"].format(self._name):
@@ -42,7 +48,7 @@ class Client(NetUdpBase):
 
     def _recvMessage(self, dataQueue, addrQueue):
         while True:
-            data, addr = self._socket.recvfrom(1024)
+            data, addr = self._socket_recv.recvfrom(1024)
             if self._precheck(addr[0]):
                 logging.info("Message:{0}".format(data))
                 dataQueue.put(data)

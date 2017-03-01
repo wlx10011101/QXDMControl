@@ -1,4 +1,5 @@
 # coding=utf-8
+ALL_IP_OF_HOST = '0.0.0.0'
 CLIENT_PORT = 8088
 SERVER_PORT = 8089
 MESSAGE = {

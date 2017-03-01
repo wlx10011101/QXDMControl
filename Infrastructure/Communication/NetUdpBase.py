@@ -5,7 +5,6 @@ Created on 20170224
 @author: WLX
 '''
 import socket
-ALL_IP_OF_HOST = '0.0.0.0'
 
 
 class NetUdpBase(object):
@@ -17,14 +16,11 @@ class NetUdpBase(object):
         self._host = host
         self._port = port
         self._address = (self._host, self._port)
-        self._socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            self._socket.bind((ALL_IP_OF_HOST, self._port))
-        except Exception:
-            pass
+        self._socket_recv = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self._socket_send = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 
     def _recvMessage(self):
         raise "NotImpletementERROR"
 
     def _sendMessage(self, message, address):
-        self._socket.sendto(message, address)
+        self._socket_send.sendto(message, address)

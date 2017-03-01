@@ -5,14 +5,16 @@ Created on 20170224
 
 @author: WLX
 '''
+import logging
 import re
 import threading
-import logging
-logging.basicConfig(level=logging.DEBUG)
 
-from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE,\
-    CLIENT_PORT
+from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE, \
+    CLIENT_PORT, SERVER_PORT, ALL_IP_OF_HOST
 from Infrastructure.Communication.NetUdpBase import NetUdpBase
+
+
+logging.basicConfig(level=logging.DEBUG)
 
 
 class Server(NetUdpBase):
@@ -20,11 +22,12 @@ class Server(NetUdpBase):
     def __init__(self, host, port):
         super(Server, self).__init__(host, port)
         self._clientDict = {}
-        
+        self._socket_recv.bind((ALL_IP_OF_HOST, SERVER_PORT))
+        self._socket_send.bind((ALL_IP_OF_HOST, CLIENT_PORT))
     def _recvMessage(self):
         while True:
             logging.info("waiting for recvMessage---")
-            data, address = self._socket.recvfrom(1024)
+            data, address = self._socket_recv.recvfrom(1024)
             logging.info("Message:{0} From:{1}".format(data, address[0]))
             threading.Thread(target=self.handoverMessage, args=(data, address[0])).start()
 
