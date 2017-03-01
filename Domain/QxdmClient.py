@@ -12,7 +12,8 @@ import threading
 from Domain.QxdmCmd import UE
 from Infrastructure.Application.QxdmApp import QXDM
 from Infrastructure.Communication.Client import Client
-from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE
+from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE,\
+    CLIENT_PORT
 
 
 class QxdmClient(object):
@@ -27,12 +28,10 @@ class QxdmClient(object):
 
     def _initClient(self):
         host = '127.0.0.1'
-        port = 8088
         name = raw_input("please input client name: ")
         serverHost = raw_input("please input server IP: ")
-        serverPort = 8088
-        self._client = Client(host, port, name)
-        if self._client.registerClient(serverHost, serverPort):
+        self._client = Client(host, CLIENT_PORT, name)
+        if self._client.registerClient(serverHost):
             threading.Thread(target=self._client._recvMessage, args=(self._dataQueue, self._addrQueue)).start()
             threading.Thread(target=self.handoverMessage).start()
             return True
