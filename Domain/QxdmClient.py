@@ -39,7 +39,7 @@ class QxdmClient(object):
         qxdmPath = self._pathFormat(qxdmPath)
         for process in psutil.process_iter():
             if process.name().upper() == "QXDM.EXE":
-                if qxdmPath in process.cmdline():
+                if qxdmPath == self._pathFormat(process.cmdline()):
                     qxdmPid = process.pid
                     self._qxdm = QXDM(qxdmPath, qxdmPid)
                     return self._qxdm._connectApp()

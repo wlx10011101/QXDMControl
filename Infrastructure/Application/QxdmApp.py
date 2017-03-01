@@ -19,7 +19,7 @@ class QXDM(AppBase):
 
     def _startApp(self):
         try:
-            self._app = Application().Start(self._path)
+            self._app = Application().Start(self._appPath)
             return True
         except Exception:
             logging.warning("Start QXDM Fail!")

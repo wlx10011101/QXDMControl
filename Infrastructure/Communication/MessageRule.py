@@ -4,7 +4,7 @@ MESSAGE = {
     "RegisterSucc": "Client {0} Register Success",
     "ExcuteResult": "ExcuteResult {0}",
     "UeAttach": "QxdmCmd ue_attach",
-    "UeDettach": "QxdmCmd ue_dettach"
+    "UeDetach": "QxdmCmd ue_dettach"
     }
 
 MESSAGEREX = {
