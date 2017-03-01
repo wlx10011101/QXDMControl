@@ -36,22 +36,23 @@ class Server(NetUdpBase):
         clientAddr = (hostIP, CLIENT_PORT)
         if reResult:
             clientDict = {clientAddr: reResult[0]}
+            if clientAddr not in self._clientDict.keys():
+                self._recordTxt(hostIP)
             self._clientDict.update(clientDict)
-            self._recordTxt(hostIP)
-            self._sendMessage(MESSAGE["RegisterSucc"].format(clientDict[clientAddr]), clientAddr)
+            self._sendMessage(MESSAGE["RegisterSucc"].format(clientDict[(hostIP, CLIENT_PORT)]), clientAddr)
             logging.info("{0} RegisterSucc".format(clientDict))
         else:
             reResult = re.findall(MESSAGEREX["ExcuteResult"], message)
             if reResult:
-                if self._precheck(address[0]):
-                    logging.info("client:{0} {1}".format(self._clientDict[hostIP], message))
+                if self._precheck(hostIP):
+                    logging.info("client:{0} {1}".format(self._clientDict[clientDict], message))
                 else:
                     logging.info("unRegister Client {0}".format(hostIP))
             else:
                 self._sendMessage("Invalid Message From {0}".format(hostIP))
 
     def _precheck(self, host):
-        if host in self._clientDict.keys():
+        if (host, CLIENT_PORT) in self._clientDict.keys():
             return True
         else:
             return False

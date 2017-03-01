@@ -36,6 +36,9 @@ class QxdmServer(object):
             fileObject = open('..\/Service\/client.txt', 'r')
             fileLines = fileObject.readlines()
             fileObject.close()
+            fileObject = open('..\/Service\/client.txt', 'w+')
+            fileObject.truncate()
+            fileObject.close()
             for fileLine in fileLines:
                 if file:
                     address = (fileLine[:-2], CLIENT_PORT)
