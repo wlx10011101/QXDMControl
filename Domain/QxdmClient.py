@@ -21,8 +21,8 @@ class QxdmClient(object):
     classdocs
     '''
     def __init__(self):
-        self._dataQueue = Queue.Queue
-        self._addrQueue = Queue.Queue
+        self._dataQueue = Queue.Queue()
+        self._addrQueue = Queue.Queue()
         while(not self._initQxdm()):pass
         while(not self._initClient()):pass
 
@@ -60,7 +60,7 @@ class QxdmClient(object):
                 
                 if re.findall(MESSAGEREX['ClientRegisterAgain'], message):
                     self._client._sendMessage(MESSAGE["ClientRegister"].format(self._client._name), (address, SERVER_PORT))
-                elif message == MESSAGE["RegisterSucc"].format(self._name):
+                elif message == MESSAGE["RegisterSucc"].format(self._client._name):
                     pass
                 elif reResult:
                     self._qxdm.sendCommand(UE[reResult[0].upper()])

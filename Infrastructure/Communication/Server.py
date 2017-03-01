@@ -45,7 +45,7 @@ class Server(NetUdpBase):
             reResult = re.findall(MESSAGEREX["ExcuteResult"], message)
             if reResult:
                 if self._precheck(hostIP):
-                    logging.info("client:{0} {1}".format(self._clientDict[clientDict], message))
+                    logging.info("client:{0} {1}".format(self._clientDict[(hostIP, CLIENT_PORT)], message))
                 else:
                     logging.info("unRegister Client {0}".format(hostIP))
             else:
