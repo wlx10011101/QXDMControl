@@ -5,8 +5,7 @@ Created on 20170224
 @author: WLX
 '''
 import logging
-from multiprocessing import Queue
-from time import ctime
+import Queue
 
 from Infrastructure.Communication.MessageRule import MESSAGE
 from Infrastructure.Communication.NetUdpBase import NetUdpBase
@@ -30,24 +29,24 @@ class Client(NetUdpBase):
     def registerClient(self, serverHost, serverPort):
         serverAddr = (serverHost, serverPort)
         self._sendMessage(MESSAGE["ClientRegister"].format(self._name), serverAddr)
-        logging.debug("send message {0}".format(MESSAGE["ClientRegister"].format(self._name)))
+        logging.info("send message {0}".format(MESSAGE["ClientRegister"].format(self._name)))
         while True:
             data, addr = self._socket.recvfrom(1024)
             logging.info("waiting for message ---")
             print data, addr
             if addr == serverAddr and data == MESSAGE["RegisterSucc"].format(self._name):
-                logging.debug(">>>>\r\nClient:{0}\r\nRegister Success\r\n<<<<\r\n".format(self._name))
+                logging.info("Client:{0} Register Success".format(self._name))
                 self._serverAddr = serverAddr
                 return True
             else:
-                logging.debug(">>>>\r\nClient:{0}\r\nRegister Failure:{1}\r\n<<<<\r\n".format(self._name, data))
+                logging.info(">>>>Client:{0} Register Failure:{1}".format(self._name, data))
                 return False
 
     def _recvMessage(self):
         while True:
             data, addr = self._socket.recvfrom(1024)
             if self._precheck(addr):
-                logging.debug("Message:{1}\r\n".format(data))
+                logging.info("Message:{0}".format(data))
                 self._dataQueue.put(data)
                 self._addrQueue.put(addr)
 
@@ -58,5 +57,6 @@ class Client(NetUdpBase):
             return False
 
 if __name__ == "__main__":
-    client1 = Client('10.9.171.165', 8088, 'clent1')
-    client1.registerClient('10.9.171.151', 8088)
+    client1 = Client('10.9.171.151', 8088, 'clent1')
+    print "register"
+    client1.registerClient('10.9.171.165', 8088)

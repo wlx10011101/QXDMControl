@@ -4,13 +4,12 @@ Created on Feb 27, 2017
 
 @author: wlx
 '''
-import re
-
 import psutil
+import re
 
 from Domain.QxdmCmd import UE
 from Infrastructure.Application.QxdmApp import QXDM
-from Infrastructure.Communication import Client
+from Infrastructure.Communication.Client import Client
 from Infrastructure.Communication.MessageRule import MESSAGEREX, MESSAGE
 
 
@@ -39,7 +38,7 @@ class QxdmClient(object):
         qxdmPath = raw_input("please input the absolutepath of QxdmApp.exe: \n")
         qxdmPath = self._pathFormat(qxdmPath)
         for process in psutil.process_iter():
-            if process.name().upper() == "QxdmApp.EXE":
+            if process.name().upper() == "QXDM.EXE":
                 if qxdmPath in process.cmdline():
                     qxdmPid = process.pid
                     self._qxdm = QXDM(qxdmPath, qxdmPid)

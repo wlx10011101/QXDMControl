@@ -31,10 +31,10 @@ class QxdmServer(object):
 
     def ueAttach(self):
         for address in self._server._clientDict.keys():
-            logging.debug("Control client {1} ue attach\r\n".format(self._server._clientDict[address]))
+            logging.info("Control client {0} ue attach".format(self._server._clientDict[address]))
             self._server._sendMessage(MESSAGE['UeAttach'], address)
 
     def ueDettach(self):
         for address in self._server._clientDict.keys():
-            logging.debug("Control client {1} ue dettach\r\n".format(self._server._clientDict[address]))
+            logging.info("Control client {0} ue dettach".format(self._server._clientDict[address]))
             self._server._sendMessage(MESSAGE['UeDettach'], address)
