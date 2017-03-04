@@ -43,9 +43,14 @@ class QXDM(AppBase):
     def sendCommand(self, command):
         try:
             commandWindow = self._findCommandWindow()
+        except Exception:
+            logging.info("QXDM Find Window Error:{0}".format(Exception))
+            return False
+        try:
             commandWindow.TypeKeys(command if re.search(r'.*~^', command) else (command + '~'))
         except Exception:
             logging.info("QXDM COMMAND ERROR:{0}".format(Exception))
+            return False
 
 if __name__ == "__main__":
     '''
